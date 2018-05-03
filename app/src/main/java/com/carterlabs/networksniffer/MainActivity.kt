@@ -23,6 +23,7 @@ class MainActivity : AppCompatActivity() {
     private val chromecastService = "_googlecast._tcp"
     private val txtRecordMDKey = "md"
     private val googleHomeValue = "Google Home"
+    private val googleHomeMiniValue = "Google Home Mini"
     private var disposable: Disposable? = null
 
     private val rxBonjour = RxBonjour.Builder()
@@ -39,7 +40,7 @@ class MainActivity : AppCompatActivity() {
         searchForGoogleHome()
     }
 
-    private fun searchForAmazonEcho(){
+    private fun searchForAmazonEcho() {
         val nodes = getNodes().filter { it.mac.startsWith(amazonStartingMac) }
         alexa_check_box.isChecked = !nodes.isEmpty()
     }
@@ -99,7 +100,8 @@ class MainActivity : AppCompatActivity() {
 
     private fun checkGoogleHome(event: BonjourEvent) {
         if (event.service.txtRecords.containsKey(txtRecordMDKey)
-                && event.service.txtRecords[txtRecordMDKey].equals(googleHomeValue, true)) {
+                && (event.service.txtRecords[txtRecordMDKey].equals(googleHomeValue, true)
+                        || event.service.txtRecords[txtRecordMDKey].equals(googleHomeMiniValue, true))) {
             google_check_box.isChecked = true
         }
     }
@@ -107,7 +109,7 @@ class MainActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         val shouldSearch = disposable?.isDisposed ?: !google_check_box.isChecked
-        if(shouldSearch){
+        if (shouldSearch) {
             searchForGoogleHome()
         }
     }
