@@ -19,11 +19,14 @@ import java.io.IOException
 
 class MainActivity : AppCompatActivity() {
 
-    private val amazonStartingMac = "50:f5:da"
+    private val amazonMacAddresses = listOf("FCA667", "FCA183", "FC65DE", "F0D2F1", "F0272D",
+            "B47C9C", "AC63BE", "A002DC", "8871E5", "84D6D0", "78E103", "74C246", "747548",
+            "6C5697", "6854FD", "6837E9", "50F5DA", "50DCE7", "44650D", "40B4CD", "38F73D",
+            "34D270", "18742E", "0C47C9", "00FC8B")
+
     private val chromecastService = "_googlecast._tcp"
     private val txtRecordMDKey = "md"
     private val googleHomeValue = "Google Home"
-    private val googleHomeMiniValue = "Google Home Mini"
     private var disposable: Disposable? = null
 
     private val rxBonjour = RxBonjour.Builder()
@@ -41,7 +44,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun searchForAmazonEcho() {
-        val nodes = getNodes().filter { it.mac.startsWith(amazonStartingMac) }
+        val nodes = getNodes().filter { node -> !amazonMacAddresses.none { node.mac.startsWith(it, true) } }
         alexa_check_box.isChecked = !nodes.isEmpty()
     }
 
@@ -61,7 +64,7 @@ class MainActivity : AppCompatActivity() {
                     val ip = splitted[0]
                     val mac = splitted[3]
                     if (mac.matches("..:..:..:..:..:..".toRegex())) {
-                        nodes.add(Node(ip, mac))
+                        nodes.add(Node(ip, mac.replace(":", "")))
                     }
                 }
                 line = bufferedReader.readLine()
@@ -99,9 +102,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkGoogleHome(event: BonjourEvent) {
-        if (event.service.txtRecords.containsKey(txtRecordMDKey)
-                && (event.service.txtRecords[txtRecordMDKey].equals(googleHomeValue, true)
-                        || event.service.txtRecords[txtRecordMDKey].equals(googleHomeMiniValue, true))) {
+        event.service.txtRecords[txtRecordMDKey]?.startsWith(googleHomeValue, true).let {
             google_check_box.isChecked = true
         }
     }
@@ -118,5 +119,6 @@ class MainActivity : AppCompatActivity() {
         super.onPause()
         disposable?.dispose()
     }
+
 
 }
