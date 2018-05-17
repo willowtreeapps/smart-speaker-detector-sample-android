@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#E02828</color>
+    <color name="colorPrimaryDark">#bc2020</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="new_label_color">#99FF0000</color>
+    <color name="info_label_color">#3333FF</color>
+    <color name="assistant_label_color">#000000</color>
+    <color name="suggestion_label_color">#3388FF</color>
+    <color name="assistant_label_background_color">#11000000</color>
+</resources>

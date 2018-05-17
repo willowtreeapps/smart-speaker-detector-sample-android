@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Grocr</string>
+    <string name="info_label_text">Talk to us through %1$s!</string>
+    <string name="assistant_waiting_text">...</string>
+    <string name="assistant_response_text">Hello, how can I help?</string>
+    <string name="assistant_tool_tip_google">Hey! Have you tried our Google Action? \nClick for
+        more info!</string>
+    <string name="assistant_tool_tip_amazon">Hey! Have you tried our Alexa Skill? \nClick for
+        more info!</string>
+    <string name="try_assistant_label">Give it a try!</string>
+</resources>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="200dp"
+    android:padding="16dp">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/grocr_card_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:cardCornerRadius="12dp"
+        app:layout_constraintBottom_toTopOf="@id/grocr_item_label"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageView
+            android:id="@+id/grocr_item_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/avocado"
+            app:layout_constraintBottom_toTopOf="@id/grocr_item_label" />
+
+    </android.support.v7.widget.CardView>
+
+    <TextView
+        android:id="@+id/grocr_item_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textAllCaps="true"
+        android:textColor="@color/assistant_label_color"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tool:text="avocado" />
+
+</android.support.constraint.ConstraintLayout>

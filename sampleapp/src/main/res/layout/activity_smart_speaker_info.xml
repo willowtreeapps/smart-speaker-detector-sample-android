@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFFFFF"
+    android:paddingEnd="16dp"
+    android:paddingStart="16dp"
+    android:paddingTop="32dp">
+
+
+    <TextView
+        android:id="@+id/new_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:alpha="0"
+        android:text="new"
+        android:textColor="@color/new_label_color"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/info_label"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:alpha="0"
+        android:textColor="@color/info_label_color"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/new_label"
+        tool:text="Talk to us through Google Home!" />
+
+    <ImageView
+        android:id="@+id/skill_icon"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginTop="48dp"
+        android:alpha="0"
+        android:src="@drawable/grocr_icon"
+        app:layout_constraintTop_toBottomOf="@id/info_label" />
+
+    <TextView
+        android:id="@+id/assistant_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:alpha="0"
+        android:background="@drawable/assistant_label_background"
+        android:textColor="@color/assistant_label_color"
+        android:textSize="16sp"
+        app:layout_constraintStart_toEndOf="@id/skill_icon"
+        app:layout_constraintTop_toTopOf="@id/skill_icon"
+        tool:text="How may I help you?" />
+
+    <TextView
+        android:id="@+id/suggestion_label"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="32dp"
+        android:alpha="0"
+        android:textAlignment="textEnd"
+        android:textColor="@color/suggestion_label_color"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintTop_toBottomOf="@id/skill_icon"
+        tool:text="Add apples to my grocery list" />
+
+    <TextView
+        android:id="@+id/try_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/assistant_tool_tip_background"
+        android:text="@string/try_assistant_label"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toTopOf="@id/device_img"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/suggestion_label"
+        tool:visibility="visible" />
+
+
+    <ImageView
+        android:id="@+id/device_img"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        tool:src="@drawable/google_home_crop" />
+
+</android.support.constraint.ConstraintLayout>
