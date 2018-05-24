@@ -1,4 +1,4 @@
-# Contributing to smart-speaker-detector
+# Contributing to smart-speaker-detector-sample-android
 
 To contribute, fork smart-speaker-detector on GitHub, make and commit your changes.
 Once you are done submit a pull request to our `master` branch.
