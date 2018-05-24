@@ -1,6 +1,6 @@
-# Contributing to Ukor 
+# Contributing to smart-speaker-detector
 
-To contribute, fork Ukor on GitHub, make and commit your changes. 
+To contribute, fork smart-speaker-detector on GitHub, make and commit your changes.
 Once you are done submit a pull request to our `master` branch.
 
 Before submitting a pull request, please make sure you have tested your changes.
