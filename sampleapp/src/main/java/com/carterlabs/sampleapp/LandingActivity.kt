@@ -16,10 +16,15 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_landing.*
 import java.util.concurrent.TimeUnit
+import android.R.menu
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+
 
 class LandingActivity : AppCompatActivity(), DeviceFoundCallback {
 
-    private val checker: CheckerDelegate by lazy {
+    val checker: CheckerDelegate by lazy {
         val delegate = CheckerDelegate(this)
         delegate.setCallbackListener(this)
         delegate
@@ -99,5 +104,24 @@ class LandingActivity : AppCompatActivity(), DeviceFoundCallback {
             else -> R.string.assistant_tool_tip_amazon
         }
         showToolTip(stringId, deviceType)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        val inflater = menuInflater
+        inflater.inflate(R.menu.settings_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
+        R.id.debug_menu_item -> {
+            // Launch debug UI here
+
+            true
+        }
+        else -> {
+            // If we got here, the user's action was not recognized.
+            // Invoke the superclass to handle it.
+            super.onOptionsItemSelected(item)
+        }
     }
 }
