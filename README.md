@@ -17,6 +17,6 @@ Since Google Home uses Cast SDK, detection should be reliable
 Amazon Alexa device detection is experimental and uses mac address
 lookup for devices that typically correspond to an Alexa.
 
-## Screenshot
+## Example of Detected Google Home Device
 
 <img src="artwork/grocr_screenshot.png" alt="screenshot" style="height: 150px;"/>
