@@ -7,31 +7,31 @@ import android.os.Bundle
 import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.TextView
 import com.carterlabs.networksniffer.CheckerDelegate
 import com.carterlabs.networksniffer.DeviceFoundCallback
 import com.carterlabs.networksniffer.DeviceType
-import com.carterlabs.sampleapp.DebugDiscoveryFragment.Companion.statusText
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_landing.*
 import java.util.concurrent.TimeUnit
-import kotlin.properties.Delegates
 
 
 class LandingActivity : AppCompatActivity(), DeviceFoundCallback {
 
-    private val debugFragment = DebugDiscoveryFragment()
-
+    lateinit var logs: TextView
     val checker: CheckerDelegate by lazy {
         val delegate = CheckerDelegate(this)
         delegate.setCallbackListener(this)
         delegate
     }
+
     private var disposable: Disposable? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,23 +46,9 @@ class LandingActivity : AppCompatActivity(), DeviceFoundCallback {
                 Pair("Pineapples", R.drawable.pineapples),
                 Pair("Steak", R.drawable.steak),
                 Pair("Strawberries", R.drawable.strawberries))
+        logs = findViewById(R.id.library_logcat)
         recycler.layoutManager = GridLayoutManager(this, 2)
         recycler.adapter = GrocrAdapter(items)
-
-
-        val logCatTask = object : DebugDiscoveryFragment.LogCatTask() {
-            override fun onProgressUpdate(vararg values: String) {
-                try {
-                    debugFragment.statusTextView.text = values[0]
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                }
-                statusText = values[0]
-                super.onProgressUpdate(*values)
-            }
-
-        }
-        logCatTask.execute()
     }
 
     override fun onResume() {
@@ -113,7 +99,6 @@ class LandingActivity : AppCompatActivity(), DeviceFoundCallback {
         checker.stopSearching()
     }
 
-
     override fun deviceFound(deviceType: DeviceType) {
         checker.stopSearching()
         disposable?.dispose()
@@ -133,14 +118,12 @@ class LandingActivity : AppCompatActivity(), DeviceFoundCallback {
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.debug_menu_item -> {
             // Launch debug UI here
-            val fragmentManager = supportFragmentManager
-
-
-            val transaction = fragmentManager.beginTransaction()
-            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-            transaction.add(android.R.id.content, debugFragment)
-                    .addToBackStack(null).commit()
-
+            if (logs.visibility == View.INVISIBLE) {
+                logs.visibility = View.VISIBLE
+            }
+            else {
+                logs.visibility = View.INVISIBLE
+            }
             true
         }
         else -> {
@@ -149,6 +132,9 @@ class LandingActivity : AppCompatActivity(), DeviceFoundCallback {
     }
 
     override fun loggingCallback(msg: String) {
-
+        //Log.d("smart-speaker-checker", msg)
+        var currentText: String = logs.text.toString()
+        currentText += msg + "\n"
+        logs.text = currentText
     }
 }
