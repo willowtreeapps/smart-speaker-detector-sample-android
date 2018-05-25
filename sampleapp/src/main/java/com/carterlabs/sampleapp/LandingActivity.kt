@@ -24,7 +24,6 @@ import java.util.concurrent.TimeUnit
 
 class LandingActivity : AppCompatActivity(), DeviceFoundCallback {
 
-    lateinit var logs: TextView
     val checker: CheckerDelegate by lazy {
         val delegate = CheckerDelegate(this)
         delegate.setCallbackListener(this)
@@ -45,7 +44,6 @@ class LandingActivity : AppCompatActivity(), DeviceFoundCallback {
                 Pair("Pineapples", R.drawable.pineapples),
                 Pair("Steak", R.drawable.steak),
                 Pair("Strawberries", R.drawable.strawberries))
-        logs = findViewById(R.id.library_logcat)
         recycler.layoutManager = GridLayoutManager(this, 2)
         recycler.adapter = GrocrAdapter(items)
     }
@@ -116,13 +114,8 @@ class LandingActivity : AppCompatActivity(), DeviceFoundCallback {
 
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.debug_menu_item -> {
-            // Launch debug UI here
-            if (logs.visibility == View.INVISIBLE) {
-                logs.visibility = View.VISIBLE
-            }
-            else {
-                logs.visibility = View.INVISIBLE
-            }
+            library_logcat.visibility = if (library_logcat.visibility == View.INVISIBLE)
+                View.VISIBLE else View.INVISIBLE
             true
         }
         else -> {
@@ -132,8 +125,8 @@ class LandingActivity : AppCompatActivity(), DeviceFoundCallback {
 
     override fun loggingCallback(msg: String) {
         //Log.d("smart-speaker-checker", msg)
-        var currentText: String = logs.text.toString()
+        var currentText: String = library_logcat.text.toString()
         currentText += msg + "\n"
-        logs.text = currentText
+        library_logcat.text = currentText
     }
 }
