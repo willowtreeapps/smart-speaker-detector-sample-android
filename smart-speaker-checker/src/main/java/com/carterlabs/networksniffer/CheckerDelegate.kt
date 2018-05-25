@@ -6,7 +6,6 @@ import de.mannodermaus.rxbonjour.BonjourEvent
 import de.mannodermaus.rxbonjour.RxBonjour
 import de.mannodermaus.rxbonjour.drivers.jmdns.JmDNSDriver
 import de.mannodermaus.rxbonjour.platforms.android.AndroidPlatform
-import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -14,7 +13,6 @@ import java.io.BufferedReader
 import java.io.FileNotFoundException
 import java.io.FileReader
 import java.io.IOException
-import kotlin.properties.Delegates
 
 
 class CheckerDelegate(context: Context) {
