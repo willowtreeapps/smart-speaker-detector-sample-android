@@ -60,6 +60,7 @@ class CheckerDelegate(context: Context) {
         if (nodes.isNotEmpty()) {
             listener?.deviceFound(DeviceType.AMAZON_ALEXA)
         }
+        logs.add("finished searching for Alexa Devices")
     }
 
     //Used to sniff out Amazon Echo in ARP table
