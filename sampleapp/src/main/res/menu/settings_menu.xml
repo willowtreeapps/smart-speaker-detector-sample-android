@@ -4,7 +4,8 @@
 
     <item
         android:id="@+id/debug_menu_item"
-        android:icon="@drawable/ic_bug_report_black_24dp"
+        android:icon="@drawable/ic_bug_report_white_24dp"
         android:title="Debugging Info"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom"
+        />
 </menu>
