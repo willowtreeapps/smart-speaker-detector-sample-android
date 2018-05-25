@@ -17,7 +17,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".AssistantActivity" />
-        <activity android:name=".DebugDiscoveryActivity"></activity>
+        <activity android:name=".DebugDiscoveryFragment"></activity>
     </application>
 
 </manifest>

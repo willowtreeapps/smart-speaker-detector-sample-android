@@ -4,25 +4,28 @@ import android.animation.Animator
 import android.animation.ValueAnimator
 import android.content.Intent
 import android.os.Bundle
+import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import com.carterlabs.networksniffer.CheckerDelegate
 import com.carterlabs.networksniffer.DeviceFoundCallback
 import com.carterlabs.networksniffer.DeviceType
+import com.carterlabs.sampleapp.DebugDiscoveryFragment.Companion.statusText
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_landing.*
 import java.util.concurrent.TimeUnit
-import android.R.menu
-import android.view.Menu
-import android.view.MenuInflater
-import android.view.MenuItem
+import kotlin.properties.Delegates
 
 
 class LandingActivity : AppCompatActivity(), DeviceFoundCallback {
+
+    private val debugFragment = DebugDiscoveryFragment()
 
     val checker: CheckerDelegate by lazy {
         val delegate = CheckerDelegate(this)
@@ -45,6 +48,21 @@ class LandingActivity : AppCompatActivity(), DeviceFoundCallback {
                 Pair("Strawberries", R.drawable.strawberries))
         recycler.layoutManager = GridLayoutManager(this, 2)
         recycler.adapter = GrocrAdapter(items)
+
+
+        val logCatTask = object : DebugDiscoveryFragment.LogCatTask() {
+            override fun onProgressUpdate(vararg values: String) {
+                try {
+                    debugFragment.statusTextView.text = values[0]
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                }
+                statusText = values[0]
+                super.onProgressUpdate(*values)
+            }
+
+        }
+        logCatTask.execute()
     }
 
     override fun onResume() {
@@ -115,13 +133,22 @@ class LandingActivity : AppCompatActivity(), DeviceFoundCallback {
     override fun onOptionsItemSelected(item: MenuItem) = when (item.itemId) {
         R.id.debug_menu_item -> {
             // Launch debug UI here
+            val fragmentManager = supportFragmentManager
+
+
+            val transaction = fragmentManager.beginTransaction()
+            transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+            transaction.add(android.R.id.content, debugFragment)
+                    .addToBackStack(null).commit()
 
             true
         }
         else -> {
-            // If we got here, the user's action was not recognized.
-            // Invoke the superclass to handle it.
             super.onOptionsItemSelected(item)
         }
+    }
+
+    override fun loggingCallback(msg: String) {
+
     }
 }
