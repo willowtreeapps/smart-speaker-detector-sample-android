@@ -6,6 +6,7 @@ import de.mannodermaus.rxbonjour.BonjourEvent
 import de.mannodermaus.rxbonjour.RxBonjour
 import de.mannodermaus.rxbonjour.drivers.jmdns.JmDNSDriver
 import de.mannodermaus.rxbonjour.platforms.android.AndroidPlatform
+import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
@@ -13,6 +14,7 @@ import java.io.BufferedReader
 import java.io.FileNotFoundException
 import java.io.FileReader
 import java.io.IOException
+import kotlin.properties.Delegates
 
 
 class CheckerDelegate(context: Context) {
@@ -27,6 +29,20 @@ class CheckerDelegate(context: Context) {
     private val googleHomeValue = "Google Home"
     private var googleHomeDisposable: Disposable? = null
     private var listener: DeviceFoundCallback? = null
+    private var logs: LogWrapper = LogWrapper()
+
+    class LogWrapper() {
+        val logList = mutableListOf<String>()
+        private var callback: DeviceFoundCallback? = null
+        fun add(string: String) {
+            logList.add(string)
+            callback?.loggingCallback(string)
+        }
+
+        fun setCallback(newCallback: DeviceFoundCallback) {
+            callback = newCallback
+        }
+    }
 
     private val rxBonjour = RxBonjour.Builder()
             .platform(AndroidPlatform.create(context))
@@ -37,9 +53,11 @@ class CheckerDelegate(context: Context) {
 
     fun setCallbackListener(listener: DeviceFoundCallback) {
         this.listener = listener
+        logs.setCallback(listener)
     }
 
     private fun searchForAmazonEcho() {
+        logs.add("searching for Alexa Devices")
         val nodes = getNodes().filter { node -> !amazonMacAddresses.none { node.mac.startsWith(it, true) } }
         if (nodes.isNotEmpty()) {
             listener?.deviceFound(DeviceType.AMAZON_ALEXA)
@@ -86,6 +104,7 @@ class CheckerDelegate(context: Context) {
     }
 
     private fun searchForGoogleHome() {
+        logs.add("searching for Home Devices")
         googleHomeDisposable?.dispose()
         googleHomeDisposable = rxBonjour.newDiscovery(chromecastService)
                 .subscribeOn(Schedulers.io())
@@ -104,15 +123,19 @@ class CheckerDelegate(context: Context) {
         val isHome = event.service.txtRecords[txtRecordMDKey]?.startsWith(googleHomeValue, true)
                 ?: false
         if (isHome) {
+            logs.add("found Home device" + event.service.txtRecords[txtRecordMDKey])
             listener?.deviceFound(DeviceType.GOOGLE_HOME)
         }
     }
 
     fun stopSearching() {
+        logs.add("stopped searching")
         googleHomeDisposable?.dispose()
     }
 
     fun startSearching() {
+
+        // Implement searching repeat here potentially
         searchForAmazonEcho()
         searchForGoogleHome()
     }
@@ -126,4 +149,5 @@ enum class DeviceType {
 
 interface DeviceFoundCallback {
     fun deviceFound(deviceType: DeviceType)
+    fun loggingCallback(msg: String)
 }
