@@ -22,7 +22,6 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_landing.*
 import java.util.concurrent.TimeUnit
 
-
 class LandingActivity : AppCompatActivity(), DeviceFoundCallback {
 
     lateinit var logs: TextView
