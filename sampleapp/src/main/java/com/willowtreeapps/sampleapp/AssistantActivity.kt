@@ -1,6 +1,7 @@
-package com.carterlabs.sampleapp
+package com.willowtreeapps.sampleapp
 
 import android.animation.Animator
+import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
@@ -40,15 +41,10 @@ class AssistantActivity : AppCompatActivity() {
             new_label.alpha = it.animatedValue as Float
             info_label.alpha = it.animatedValue as Float
         }
-        animation.addListener(object : Animator.AnimatorListener {
-            override fun onAnimationRepeat(p0: Animator?) {}
+        animation.addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationEnd(p0: Animator?) {
                 revealAssistantResponse()
             }
-
-            override fun onAnimationCancel(p0: Animator?) {}
-            override fun onAnimationStart(p0: Animator?) {}
-
         })
         animation.startDelay = 500
         animation.start()
@@ -61,13 +57,10 @@ class AssistantActivity : AppCompatActivity() {
             assistant_text.translationY = it.animatedValue as Float
             skill_icon.translationY = it.animatedValue as Float
         }
-        animation.addListener(object : Animator.AnimatorListener {
-            override fun onAnimationRepeat(p0: Animator?) {}
+        animation.addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationEnd(p0: Animator?) {
                 firstExampleReveal()
             }
-
-            override fun onAnimationCancel(p0: Animator?) {}
             override fun onAnimationStart(p0: Animator?) {
                 assistant_text.alpha = 1f
                 assistant_text.text = getString(R.string.assistant_response_text)
@@ -87,8 +80,7 @@ class AssistantActivity : AppCompatActivity() {
         animation.addUpdateListener {
             suggestion_label.alpha = it.animatedValue as Float
         }
-        animation.addListener(object : Animator.AnimatorListener {
-            override fun onAnimationRepeat(p0: Animator?) {}
+        animation.addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationEnd(p0: Animator?) {
                 if (exampleIndex < assistantType.examplePhrases.size - 1) {
                     revealExampleText(exampleIndex)
@@ -96,10 +88,6 @@ class AssistantActivity : AppCompatActivity() {
                     revealTryText()
                 }
             }
-
-            override fun onAnimationCancel(p0: Animator?) {}
-            override fun onAnimationStart(p0: Animator?) {}
-
         })
         animation.startDelay = if (exampleIndex == 0) 750 else 250
         animation.start()
@@ -111,15 +99,10 @@ class AssistantActivity : AppCompatActivity() {
         animation.addUpdateListener {
             suggestion_label.alpha = it.animatedValue as Float
         }
-        animation.addListener(object : Animator.AnimatorListener {
-            override fun onAnimationRepeat(p0: Animator?) {}
+        animation.addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationEnd(p0: Animator?) {
                 firstExampleReveal(exampleIndex + 1)
             }
-
-            override fun onAnimationCancel(p0: Animator?) {}
-            override fun onAnimationStart(p0: Animator?) {}
-
         })
         animation.startDelay = 1000
         animation.start()
@@ -131,10 +114,7 @@ class AssistantActivity : AppCompatActivity() {
         animation.addUpdateListener {
             try_text.alpha = it.animatedValue as Float
         }
-        animation.addListener(object : Animator.AnimatorListener {
-            override fun onAnimationRepeat(p0: Animator?) {}
-            override fun onAnimationEnd(p0: Animator?) {}
-            override fun onAnimationCancel(p0: Animator?) {}
+        animation.addListener(object : AnimatorListenerAdapter() {
             override fun onAnimationStart(p0: Animator?) {
                 try_text.alpha = 0f
                 try_text.visibility = View.VISIBLE
@@ -147,16 +127,13 @@ class AssistantActivity : AppCompatActivity() {
 
 }
 
-enum class AssistantType {
+enum class AssistantType(s: String) {
 
-    GOOGLE_HOME,
-    AMAZON_ALEXA;
+    GOOGLE_HOME("Google Home"),
+    AMAZON_ALEXA("Amazon Alexa");
 
     val deviceName: String by lazy {
-        when (ordinal) {
-            0 -> "Google Home"
-            else -> "Amazon Alexa"
-        }
+        s
     }
 
     val deviceImg: Int by lazy {

@@ -1,7 +1,6 @@
-package com.carterlabs.networksniffer
+package com.willowtreeapps.networksniffer
 
-import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
+import android.content.Context
 import android.util.Log
 import de.mannodermaus.rxbonjour.BonjourEvent
 import de.mannodermaus.rxbonjour.RxBonjour
@@ -10,14 +9,13 @@ import de.mannodermaus.rxbonjour.platforms.android.AndroidPlatform
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
-import kotlinx.android.synthetic.main.activity_device_identifier.*
 import java.io.BufferedReader
 import java.io.FileNotFoundException
 import java.io.FileReader
 import java.io.IOException
 
 
-class MainActivity : AppCompatActivity() {
+class CheckerDelegate(context: Context) {
 
     private val amazonMacAddresses = listOf("FCA667", "FCA183", "FC65DE", "F0D2F1", "F0272D",
             "B47C9C", "AC63BE", "A002DC", "8871E5", "84D6D0", "78E103", "74C246", "747548",
@@ -27,25 +25,42 @@ class MainActivity : AppCompatActivity() {
     private val chromecastService = "_googlecast._tcp"
     private val txtRecordMDKey = "md"
     private val googleHomeValue = "Google Home"
-    private var disposable: Disposable? = null
+    private var googleHomeDisposable: Disposable? = null
+    private var listener: DeviceFoundCallback? = null
+    private var logs: LogWrapper = LogWrapper()
+
+    class LogWrapper() {
+        val logList = mutableListOf<String>()
+        private var callback: DeviceFoundCallback? = null
+        fun add(string: String) {
+            logList.add(string)
+            callback?.loggingCallback(string)
+        }
+
+        fun setCallback(newCallback: DeviceFoundCallback) {
+            callback = newCallback
+        }
+    }
 
     private val rxBonjour = RxBonjour.Builder()
-            .platform(AndroidPlatform.create(this))
+            .platform(AndroidPlatform.create(context))
             .driver(JmDNSDriver.create())
             .create()
 
     data class Node(val ip: String, val mac: String)
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_device_identifier)
-        searchForAmazonEcho()
-        searchForGoogleHome()
+    fun setCallbackListener(listener: DeviceFoundCallback) {
+        this.listener = listener
+        logs.setCallback(listener)
     }
 
     private fun searchForAmazonEcho() {
+        logs.add("searching for Alexa Devices")
         val nodes = getNodes().filter { node -> !amazonMacAddresses.none { node.mac.startsWith(it, true) } }
-        alexa_check_box.isChecked = !nodes.isEmpty()
+        if (nodes.isNotEmpty()) {
+            listener?.deviceFound(DeviceType.AMAZON_ALEXA)
+        }
+        logs.add("finished searching for Alexa Devices")
     }
 
     //Used to sniff out Amazon Echo in ARP table
@@ -88,7 +103,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun searchForGoogleHome() {
-        disposable = rxBonjour.newDiscovery(chromecastService)
+        logs.add("searching for Home Devices")
+        googleHomeDisposable?.dispose()
+        googleHomeDisposable = rxBonjour.newDiscovery(chromecastService)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
@@ -102,23 +119,34 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun checkGoogleHome(event: BonjourEvent) {
-        event.service.txtRecords[txtRecordMDKey]?.startsWith(googleHomeValue, true).let {
-            google_check_box.isChecked = true
+        val isHome = event.service.txtRecords[txtRecordMDKey]?.startsWith(googleHomeValue, true)
+                ?: false
+        if (isHome) {
+            logs.add("found Home device: " + event.service.txtRecords[txtRecordMDKey])
+            listener?.deviceFound(DeviceType.GOOGLE_HOME)
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        val shouldSearch = disposable?.isDisposed ?: !google_check_box.isChecked
-        if (shouldSearch) {
-            searchForGoogleHome()
-        }
+    fun stopSearching() {
+        logs.add("stopped searching")
+        googleHomeDisposable?.dispose()
     }
 
-    override fun onPause() {
-        super.onPause()
-        disposable?.dispose()
+    fun startSearching() {
+        // Implement searching repeat here potentially
+        logs.add("starting search for smart speakers")
+        searchForAmazonEcho()
+        searchForGoogleHome()
     }
 
+}
 
+enum class DeviceType {
+    GOOGLE_HOME,
+    AMAZON_ALEXA;
+}
+
+interface DeviceFoundCallback {
+    fun deviceFound(deviceType: DeviceType)
+    fun loggingCallback(msg: String)
 }
