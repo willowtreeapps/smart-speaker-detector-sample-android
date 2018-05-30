@@ -3,6 +3,8 @@ package com.willowtreeapps.sampleapp
 import android.animation.Animator
 import android.animation.AnimatorListenerAdapter
 import android.animation.ValueAnimator
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.View
@@ -14,6 +16,8 @@ const val DEVICE_KEY = "Device_Type"
 class AssistantActivity : AppCompatActivity() {
 
     lateinit var assistantType: AssistantType
+    private val googleAssistantUrl = "https://assistant.google.com/services/invoke/"
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -26,7 +30,15 @@ class AssistantActivity : AppCompatActivity() {
 
         info_label.text = getString(R.string.info_label_text, assistantType.deviceName)
         device_img.setImageResource(assistantType.deviceImg)
-
+        try_text.setOnClickListener {
+            if (assistantType == AssistantType.GOOGLE_HOME) {
+                val uri = Uri.parse(googleAssistantUrl)
+                val intent = Intent()
+                intent.data = uri
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                startActivity(intent)
+            }
+        }
         startPlaybackAnimation()
     }
 
@@ -61,6 +73,7 @@ class AssistantActivity : AppCompatActivity() {
             override fun onAnimationEnd(p0: Animator?) {
                 firstExampleReveal()
             }
+
             override fun onAnimationStart(p0: Animator?) {
                 assistant_text.alpha = 1f
                 assistant_text.text = getString(R.string.assistant_response_text)
