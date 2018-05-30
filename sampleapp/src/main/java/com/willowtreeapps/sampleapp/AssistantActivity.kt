@@ -127,14 +127,10 @@ class AssistantActivity : AppCompatActivity() {
 
 }
 
-enum class AssistantType(s: String) {
+enum class AssistantType(val deviceName: String) {
 
     GOOGLE_HOME("Google Home"),
     AMAZON_ALEXA("Amazon Alexa");
-
-    val deviceName: String by lazy {
-        s
-    }
 
     val deviceImg: Int by lazy {
         when (ordinal) {
