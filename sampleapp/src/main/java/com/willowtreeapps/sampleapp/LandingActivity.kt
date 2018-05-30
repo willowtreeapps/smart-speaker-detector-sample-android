@@ -1,20 +1,17 @@
-package com.carterlabs.sampleapp
+package com.willowtreeapps.sampleapp
 
 import android.animation.Animator
 import android.animation.ValueAnimator
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.FragmentTransaction
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.GridLayoutManager
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import android.widget.TextView
-import com.carterlabs.networksniffer.CheckerDelegate
-import com.carterlabs.networksniffer.DeviceFoundCallback
-import com.carterlabs.networksniffer.DeviceType
+import com.willowtreeapps.networksniffer.CheckerDelegate
+import com.willowtreeapps.networksniffer.DeviceFoundCallback
+import com.willowtreeapps.networksniffer.DeviceType
 import io.reactivex.Flowable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
