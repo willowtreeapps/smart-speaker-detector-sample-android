@@ -16,8 +16,8 @@ const val DEVICE_KEY = "Device_Type"
 class AssistantActivity : AppCompatActivity() {
 
     lateinit var assistantType: AssistantType
+    // See https://developers.google.com/actions/console/publishing#linking_to_your_actions
     private val googleAssistantUrl = "https://assistant.google.com/services/invoke/"
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
