@@ -1,4 +1,6 @@
-# smart-speaker-detector-sample-android
+![smart-speaker-detector-logo](artwork/smart-speaker-detection-banner.png)
+
+# Smart Speaker Detector for Android
 
 Amazon Alexa and Google Home detection example for Android
 
