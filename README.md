@@ -1,4 +1,6 @@
-# smart-speaker-detector-sample-android
+![smart-speaker-detector-logo](artwork/smart-speaker-detection-banner.png)
+
+# Smart Speaker Detector for Android
 
 Amazon Alexa and Google Home detection example for Android
 
@@ -10,13 +12,15 @@ about detected devices
 
 ## Approach
 
-We are using an arp table lookup to find devices on the local network.
+We are using an mDNS to find Google Home devices, and ARP table lookup 
+to find Alexa devices.
 
 Since Google Home uses Cast SDK, detection should be reliable
 
-Amazon Alexa device detection is experimental and uses mac address
+Amazon Alexa device detection is experimental and uses MAC address
 lookup for devices that typically correspond to an Alexa.
 
 ## Example of Detected Google Home Device
-
-<img src="artwork/grocr_screenshot.png" alt="screenshot" style="height: 150px;"/>
+<p align="center">
+  <img src="artwork/grocr_screenshot.png" alt="screenshot" style="height: 100px;"/>
+</p>
