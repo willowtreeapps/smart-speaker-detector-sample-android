@@ -22,5 +22,5 @@ lookup for devices that typically correspond to an Alexa.
 
 ## Example of Detected Google Home Device
 <p align="center">
-  <img src="artwork/grocr_screenshot.png" alt="screenshot" style="height: 100px;"/>
+  <img src="artwork/app_demo.gif" alt="App Demo Gif" style="height: 100px;"/>
 </p>
